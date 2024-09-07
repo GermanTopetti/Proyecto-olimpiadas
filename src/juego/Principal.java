@@ -19,7 +19,8 @@ import java.awt.Font;
 public class Principal extends JFrame {
   private static final long serialVersionUID = 1L;
   private JPanel contentPane;
-
+  boolean botonPantalla=true;
+ 
   /**
    * Launch the application.
    */
@@ -40,21 +41,48 @@ public class Principal extends JFrame {
    * Create the frame.
    */
   public Principal() {
+    
     setTitle("El agua con Pablo");
     setForeground(new Color(0, 0, 0));
     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     setBackground(new Color(0, 0, 0));
     contentPane = new JPanel();
-    setBounds(100, 100, 1344, 786);
+    setBounds(100, 100, 1366, 768);
     getContentPane().setLayout(null);
     
     JButton inicio = new JButton("");
     inicio.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         juego();
+        dispose();
+        
       }
     });
     
+    /* JButton pantalla = new JButton("");
+    pantalla.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        fullscreen();
+        if(botonPantalla==true){
+          pantalla.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/modo-ventana.png")));
+          botonPantalla=false;
+          
+        }
+        else {
+          pantalla.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/pantalla-completa.png")));
+          botonPantalla=true;
+          
+        }
+      
+      }
+    });
+    */
+   /* pantalla.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/pantalla-completa.png")));
+    pantalla.setBorderPainted(false);
+    pantalla.setContentAreaFilled(false);
+    pantalla.setBounds(570, 375, 150, 40);
+    getContentPane().add(pantalla);
+    */
     JLabel nutria = new JLabel("");
     nutria.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/nutria-boca-cerrada.png")));
     nutria.setBounds(120, 320, 399, 506);
@@ -84,11 +112,22 @@ public class Principal extends JFrame {
     modoHistoria.setContentAreaFilled(false);
     getContentPane().add(modoHistoria);
     
-
+    JButton botonSalir = new JButton("");
+    botonSalir.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/boton-salir.png")));
+    botonSalir.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        dispose();
+      }
+    });
+    botonSalir.setBounds(576, 420, 140, 40);
+    
+    getContentPane().add(botonSalir);
+    botonSalir.setBorderPainted(false);
+    botonSalir.setContentAreaFilled(false);
    
     JLabel fondo = new JLabel();
-    fondo.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/a61900185607a45a0747d12abd0ebae0368a6cc8c6542f8e71ea6f399d41abbf.png")));
-    fondo.setBounds(0, -21, 1386, 810);
+    fondo.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/fondo-del-todo.png")));
+    fondo.setBounds(0, -21, 1400, 810);
     getContentPane().add(fondo);
 
   }
@@ -97,4 +136,14 @@ public class Principal extends JFrame {
     //juego.show();
     juego.setVisible(rootPaneCheckingEnabled);
   }
+/*  public void fullscreen() {
+    super.dispose();
+    super.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    super.setUndecorated(!super.isUndecorated());
+    super.setVisible(rootPaneCheckingEnabled);
+  }
+  public boolean getFullscreen() {
+    return botonPantalla;
+  }
+ */
 }

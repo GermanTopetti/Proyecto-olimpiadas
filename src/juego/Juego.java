@@ -13,24 +13,27 @@ import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
+import java.awt.SystemColor;
+import javax.swing.UIManager;
 
-public class Juego extends JFrame {
+public class Juego extends JFrame { 
   private static final long serialVersionUID = 1L;
   private JPanel contentPane;
   public int contador=0;
   public int puntos=0;
+  public int preguntaContador;
+  public int preguntaContadorBien=0;
+  public int preguntaContadorMal=0;
+  boolean pantalla;
+  Principal p=new Principal();
 
-  /**
-   * Launch the application.
-   */
-
-  /**
-   * Create the frame.
-   */
   public Juego() {
-  
+   /* if(p.getFullscreen()==true) {
+      fullscreen();
+    }
+  */setTitle("El agua con Pablo");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setBounds(100, 100, 1344, 786);
+    setBounds(100, 100, 1366, 768);
     contentPane = new JPanel();
     contentPane.setBackground(new Color(0, 0, 0));
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -41,13 +44,14 @@ public class Juego extends JFrame {
  
     JLabel nutria=new JLabel("");
     nutria.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/cartel-vacio.png")));
-   
+    nutria.setBounds(457,266,400,200);
+    
     nutria.setForeground(new Color(246, 245, 244));
     JButton verdadero=new JButton("");
   
     verdadero.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/boton.png")));
     JButton falso=new JButton("");
-   falso.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/boton.png")));
+    falso.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/boton.png")));
     
     JLabel creadores = new JLabel("Creadores: German Topetti, Emiliano Brito");
     creadores.setForeground(new Color(0, 0, 0));
@@ -55,14 +59,49 @@ public class Juego extends JFrame {
     creadores.setBounds(12, 715, 427, 15);
     contentPane.add(creadores);
     
+    JLabel lblInicio = new JLabel("inicio");
+    lblInicio.setFont(new Font("Courier 10 Pitch", Font.BOLD, 22));
+    lblInicio.setHorizontalAlignment(SwingConstants.CENTER);
+    lblInicio.setBounds(610, 400, 87, 39);
+    contentPane.add(lblInicio);
+    lblInicio.setVisible(false);
+    
+    JButton reiniciar = new JButton("");
+    reiniciar.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        dispose();
+        ventanaPrincipal();
+      }
+    });
+    
+    JLabel contadorPregunta = new JLabel("");
+    contadorPregunta.setForeground(UIManager.getColor("CheckBox.foreground"));
+    contadorPregunta.setHorizontalAlignment(SwingConstants.CENTER);
+    contadorPregunta.setFont(new Font("Courier 10 Pitch", Font.BOLD, 14));
+    contadorPregunta.setBounds(189, 242, 210, 50);
+    contentPane.add(contadorPregunta);
+    
+    JLabel puntosSistema = new JLabel("");
+    puntosSistema.setFont(new Font("Courier 10 Pitch", Font.BOLD, 14));
+    puntosSistema.setForeground(UIManager.getColor("CheckBox.foreground"));
+    puntosSistema.setHorizontalAlignment(SwingConstants.CENTER);
+    puntosSistema.setBounds(167, 271, 252, 60);
+    contentPane.add(puntosSistema);
+    reiniciar.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/boton-salida.png")));
+    reiniciar.setBounds(1230, 30, 60, 60);
+    contentPane.add(reiniciar);
+    
+    reiniciar.setBorderPainted(false);
+    reiniciar.setContentAreaFilled(false);
+    
     JLabel nutriaCerrada = new JLabel("");
     nutriaCerrada.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/nutria-boca-cerrada.png")));
-    nutriaCerrada.setBounds(66, 358, 365, 488);
+    nutriaCerrada.setBounds(-53, 358, 365, 488);
     contentPane.add(nutriaCerrada);
     
     JLabel nutriaAbierta = new JLabel("");
     nutriaAbierta.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/nutria-boca-abierta.png")));
-    nutriaAbierta.setBounds(66, 358, 365, 488);
+    nutriaAbierta.setBounds(-53, 358, 365, 488);
     contentPane.add(nutriaAbierta);
     
     JLabel siguientePregunta = new JLabel("Siguiente Pregunta");
@@ -73,14 +112,14 @@ public class Juego extends JFrame {
     
     JLabel lblNo = new JLabel("no");
     lblNo.setFont(new Font("Dialog", Font.BOLD, 17));
-    lblNo.setBounds(596, 417, 35, 15);
+    lblNo.setBounds(675, 417, 35, 15);
     contentPane.add(lblNo);
     
     JLabel lblSi = new JLabel("si");
+    lblSi.setHorizontalAlignment(SwingConstants.CENTER);
     lblSi.setFont(new Font("Dialog", Font.BOLD, 18));
-    lblSi.setBounds(675, 418, 22, 13);
+    lblSi.setBounds(596, 417, 25, 15);
     contentPane.add(lblSi);
-    
   
     JButton boton1=new JButton("");
     boton1.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/boton-si-no.png")));
@@ -88,45 +127,57 @@ public class Juego extends JFrame {
     boton1.setContentAreaFilled(false);
     contentPane.add(boton1);
     
-    boton1.setBounds(662,400 ,50,50);
+    boton1.setBounds(585,400,50, 50);
     JButton boton2=new JButton("");
     boton2.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/boton-si-no.png")));
     boton2.setBorderPainted(false);
     boton2.setContentAreaFilled(false);
     contentPane.add(boton2);
-    boton2.setBounds(585,400,50, 50);
+    boton2.setBounds(662,400 ,50,50);
     boton2.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
       ventanaPrincipal();
         dispose();
       }
     });
+    JLabel lblTextoDeDato = new JLabel("");
+    lblTextoDeDato.setBounds(173, 242, 246, 89);
+    contentPane.add(lblTextoDeDato);
+    lblTextoDeDato.setVisible(false);
+    
+    JLabel lblDato = new JLabel("");
+    lblDato.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/datos.png")));
+    lblDato.setBounds(149, 108, 514, 379);
+    contentPane.add(lblDato);
+    lblDato.setVisible(false);
     
     JLabel preguntasNutria = new JLabel("¿Estas listo para empezar?");
+    preguntasNutria.setForeground(UIManager.getColor("CheckBox.foreground"));
     preguntasNutria.setHorizontalAlignment(SwingConstants.CENTER);
     preguntasNutria.setFont(new Font("URW Bookman", preguntasNutria.getFont().getStyle() | Font.BOLD, preguntasNutria.getFont().getSize() + 6));
-    preguntasNutria.setBounds(468, 242, 389, 208);
+    preguntasNutria.setBounds(475, 242, 374, 208);
     contentPane.add(preguntasNutria);
     
     JLabel respuestaTrue = new JLabel("Verdadero");
+    respuestaTrue.setHorizontalAlignment(SwingConstants.CENTER);
     respuestaTrue.setFont(new Font("Courier 10 Pitch", Font.BOLD, 16));
-    respuestaTrue.setBounds(675, 419, 90, 15);
+    respuestaTrue.setBounds(517, 407, 135, 32);
     contentPane.add(respuestaTrue);
     respuestaTrue.setVisible(false);
     
     
     JLabel respuestaFalse = new JLabel("Falso");
+    respuestaFalse.setHorizontalAlignment(SwingConstants.CENTER);
     respuestaFalse.setFont(new Font("Courier 10 Pitch", Font.BOLD, 18));
-    respuestaFalse.setBounds(553, 418, 70, 15);
+    respuestaFalse.setBounds(653, 407, 135, 32);
     contentPane.add(respuestaFalse);
     respuestaFalse.setVisible(false);
     
     contentPane.add(verdadero);
     contentPane.add(falso);
     contentPane.add(nutria);
-    verdadero.setBounds(652, 400, 133, 50);
-    falso.setBounds(517, 400, 133, 50);
-    nutria.setBounds(457,266,400,200);
+    verdadero.setBounds(517, 400, 133, 50);
+    falso.setBounds(652, 400, 133, 50);
     verdadero.setBorderPainted(false);
     verdadero.setContentAreaFilled(false);
     falso.setBorderPainted(false);
@@ -136,9 +187,9 @@ public class Juego extends JFrame {
    falso.setVisible(false);
     
 
-    JLabel fondo = new JLabel("New label");
-   fondo.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/a61900185607a45a0747d12abd0ebae0368a6cc8c6542f8e71ea6f399d41abbf.png")));
-    fondo.setBounds(0, -15, 1344, 801);
+    JLabel fondo = new JLabel("");
+    fondo.setIcon(new ImageIcon(Principal.class.getResource("/juego/imgs/fondo-del-todo.png")));
+    fondo.setBounds(0, -40, 1368, 841);
     contentPane.add(fondo);
     
     boton1.addActionListener(new ActionListener() {
@@ -151,7 +202,21 @@ public class Juego extends JFrame {
         respuestaTrue.setVisible(true);
         lblSi.setVisible(false);
         lblNo.setVisible(false);
+        lblDato.setVisible(true);
+        lblTextoDeDato.setVisible(false);
         siguientePregunta.setVisible(false);
+        contadorPregunta.setVisible(true);
+        puntosSistema.setVisible(true);
+        
+        contadorPregunta.setText("<html>Estas en la pregunta "+Integer.toString(getNumeroDePregunta())+"/6 Respondiste "+preguntaContadorBien+" Bien y "+preguntaContadorMal+" mal</html>");
+        puntosSistema.setText("Tienes "+puntos+" puntos");
+        setNumeroDePregunta(1);  
+        if(preguntaContador>=7) {
+          preguntaContador=6;
+        }
+       
+       
+        
         if(contador==0) {
         preguntasNutria.setText("<html>La canilla debe mantenerse cerrada si no se usa</html>");
         }
@@ -171,53 +236,84 @@ public class Juego extends JFrame {
           preguntasNutria.setText("<html>La sequia del año 2023 se pudo prevenir </html>");
         }
         else {
-          preguntasNutria.setText("conseguiste "+puntos+" puntos");
+          preguntasNutria.setText("Conseguiste "+puntos+" puntos");
           verdadero.setVisible(false);
           falso.setVisible(false);
           respuestaTrue.setVisible(false);
           respuestaFalse.setVisible(false);
+          reiniciar.setVisible(true);
+          lblInicio.setVisible(true);
+          reiniciar.setIcon(new ImageIcon(Juego.class.getResource("/juego/imgs/boton.png")));
+          reiniciar.setBounds(582, 390, 145, 60);
         }
       }
     }); 
     verdadero.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+        contadorPregunta.setVisible(false);
+        puntosSistema.setVisible(false);
        if(contador==0) {
          preguntasNutria.setText("Correcto, sumas un punto");
          puntos=puntos+1;
          nutriaCerrada.setVisible(false);
          nutriaAbierta.setVisible(true);
+         lblDato.setVisible(true);
+         lblTextoDeDato.setVisible(true);
+         lblTextoDeDato.setText("<html>Dejar la canilla abierta 1 minuto puede llegar a consumir 10 litros de agua.</html>");
+         preguntaContadorBien=preguntaContadorBien+1;
        }
        else if(contador==1) {
          preguntasNutria.setText("Error, te equivocaste");
          puntos=puntos-1;
          nutriaCerrada.setVisible(true);
          nutriaAbierta.setVisible(false);
+         lblDato.setVisible(true);
+         lblTextoDeDato.setVisible(true);
+         lblTextoDeDato.setText("<html>Aunque pueda parecer que si, se dice que el agua potable en 2050 va a ser muy escasa</html>");
+         preguntaContadorMal=preguntaContadorMal+1;
        }
+       
        else if(contador==2) {
-         preguntasNutria.setText("paa, le erraste");
+         preguntasNutria.setText("¡Ups!, le erraste");
          puntos=puntos-1;
          nutriaCerrada.setVisible(true);
          nutriaAbierta.setVisible(false);
+         lblDato.setVisible(true);
+         lblTextoDeDato.setVisible(true);
+         lblTextoDeDato.setText("<html>Lo correcto es tomar un baño de entre 5 y 15 minutos.</html>");
+         preguntaContadorMal=preguntaContadorMal+1;
        }
        else if(contador==3) {
-         preguntasNutria.setText("seeee, es verdad");
+         preguntasNutria.setText("Si, es verdad");
          puntos=puntos+1;
          nutriaCerrada.setVisible(false);
          nutriaAbierta.setVisible(true);
+         lblDato.setVisible(true);
+         lblTextoDeDato.setVisible(true);
+         lblTextoDeDato.setText("<html>Todo el mundo sabe que los seres vivos necesitamos del agua para sobrevivir.</html>");
+         preguntaContadorBien=preguntaContadorBien+1;
        }
        else if(contador==4) {
-         preguntasNutria.setText("tienes toda la razon");
+         preguntasNutria.setText("Tienes toda la razón");
          puntos=puntos+1;
          nutriaCerrada.setVisible(false);
          nutriaAbierta.setVisible(true);
+         lblDato.setVisible(true);
+         lblTextoDeDato.setVisible(true);
+         lblTextoDeDato.setText("<html>Aproximadamente 13 millones de toneladas de plastico se va al oceano cada año.</html>");
+         preguntaContadorBien=preguntaContadorBien+1;
        }
        else if(contador==5) {
          preguntasNutria.setText("Error, es falso");
          puntos=puntos-1;
          nutriaCerrada.setVisible(true);
          nutriaAbierta.setVisible(false);
+         lblDato.setVisible(true);
+         lblTextoDeDato.setVisible(true);
+         lblTextoDeDato.setText("<html>Una sequia es una anomalia climatologica y los humanos no podemos controlar la naturaleza.</html>");
          siguientePregunta.setText("Ver puntaje");
          siguientePregunta.setFont(new Font("Courier 10 Pitch", Font.BOLD, 17));
+         preguntaContadorMal=preguntaContadorMal+1;
        }
        verdadero.setVisible(false);
        falso.setVisible(false);
@@ -233,43 +329,70 @@ public class Juego extends JFrame {
       }});
     falso.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
+       
+        contadorPregunta.setVisible(false);
+        puntosSistema.setVisible(false);
         if(contador==0) {
-          preguntasNutria.setText("error, es verdadero");
+          preguntasNutria.setText("Error, es verdadero");
           puntos=puntos-1;
           nutriaCerrada.setVisible(true);
           nutriaAbierta.setVisible(false);
+          lblDato.setVisible(true);
+          lblTextoDeDato.setVisible(true);
+          lblTextoDeDato.setText("<html>Dejar la canilla abierta 1 minuto puede llegar a consumir 10 litros de agua.</html>");
+          preguntaContadorMal=preguntaContadorMal+1;
         }
         else if(contador==1) {
-          preguntasNutria.setText("le embocaste crack");
+          preguntasNutria.setText("Le embocaste crack");
           puntos=puntos+1;
           nutriaCerrada.setVisible(false);
           nutriaAbierta.setVisible(true);
+          lblDato.setVisible(true);
+          lblTextoDeDato.setVisible(true);
+          lblTextoDeDato.setText("<html>Aunque pueda parecer que si, se dice que el agua potable en 2050 va a ser muy escasa</html>");
+          preguntaContadorBien=preguntaContadorBien+1;
         }
         else if(contador==2) {
-          preguntasNutria.setText("exactooo, sumas otro punto");
+          preguntasNutria.setText("Exactooo, sumas un punto");
           puntos=puntos+1;
           nutriaCerrada.setVisible(false);
           nutriaAbierta.setVisible(true);
+          lblDato.setVisible(true);
+          lblTextoDeDato.setVisible(true);
+          lblTextoDeDato.setText("<html>Lo correcto es tomar un baño de entre 5 y 15 minutos.</html>");
+          preguntaContadorBien=preguntaContadorBien+1;
         }
         else if(contador==3) {
-          preguntasNutria.setText("le erraste, es verdadero");
+          preguntasNutria.setText("Le erraste, es verdadero");
           puntos=puntos-1;
           nutriaCerrada.setVisible(true);
           nutriaAbierta.setVisible(false);
+          lblDato.setVisible(true);
+          lblTextoDeDato.setVisible(true);
+          lblTextoDeDato.setText("<html>Todo el mundo sabe que los seres vivos necesitamos del agua para sobrevivir.</html>");
+          preguntaContadorMal=preguntaContadorMal+1;
         }
         else if(contador==4) {
-          preguntasNutria.setText("te equivocaste, -1 punto");
+          preguntasNutria.setText("Te equivocaste, -1 punto");
           puntos=puntos-1;
           nutriaCerrada.setVisible(true);
           nutriaAbierta.setVisible(false);
+          lblDato.setVisible(true);
+          lblTextoDeDato.setVisible(true);
+          lblTextoDeDato.setText("<html>Aproximadamente 13 millones de toneladas de plastico se va al oceano cada año.</html>");
+          preguntaContadorMal=preguntaContadorMal+1;
         }
         else if(contador==5) {
-          preguntasNutria.setText("bieen, sumas un punto");
+          preguntasNutria.setText("Bieen, sumas un punto");
           puntos=puntos+1;
           nutriaCerrada.setVisible(false);
           nutriaAbierta.setVisible(true);
+          lblDato.setVisible(true);
+          lblTextoDeDato.setVisible(true);
+          lblTextoDeDato.setText("<html>Una sequia es una anomalia climatologica y los humanos no podemos controlar la naturaleza.</html>");
           siguientePregunta.setText("ver puntaje");
           siguientePregunta.setFont(new Font("Courier 10 Pitch", Font.BOLD, 17));
+          preguntaContadorBien=preguntaContadorBien+1;
         }
         
         verdadero.setVisible(false);
@@ -282,13 +405,26 @@ public class Juego extends JFrame {
         siguientePregunta.setVisible(true);
         contador=contador+1;
      
-        
+      
       }
     });
-    
   }
   private void ventanaPrincipal () {
     Principal ventanaPrincipal=new Principal();
-    ventanaPrincipal.show();
+    ventanaPrincipal.setVisible(rootPaneCheckingEnabled);
   }
+  public int getNumeroDePregunta() {
+    return preguntaContador;
+  }
+  public void setNumeroDePregunta(int a) {
+    preguntaContador=preguntaContador+a;
+  }
+ /* public void fullscreen() {
+    super.dispose();
+    super.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    super.setUndecorated(!super.isUndecorated());
+    super.setVisible(rootPaneCheckingEnabled);
+  }
+*/
+  
 }
